@@ -1,12 +1,9 @@
 import numpy as np
 import numpy.random as rng
 import pandas as pd
-from openpyxl import load_workbook
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import KFold, LeaveOneOut
-import xlrd
-#from own_package.smote.smote_code import produce_smote, produce_invariant
-from .others import print_array_to_excel
+from sklearn.model_selection import KFold
+from own_package.data_augmentation import produce_smote, produce_invariant
 
 
 class Shortcut_fl:
