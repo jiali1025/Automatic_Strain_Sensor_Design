@@ -15,9 +15,16 @@ def selector(case, **kwargs):
         fl_dir = './excel/Data_loader_Round13.xlsx'
         other_names = ['ett30', 'ettI01']
         other_dir = ['./excel/ett30.xlsx', './excel/ett30I01.xlsx']
+        data_augmentation = 'invariant'
+        numel = 10
         # Load main training data
         fl = load_data_to_fl(fl_dir, normalise_labels=False, norm_mask=[0, 1, 3, 4, 5])
-        fl_store = fl.create_kf(k_folds=k_folds, shuffle=True)
+        if data_augmentation == 'smote':
+            fl_store = fl.fold_smote_kf_augment(numel=numel, k_folds=k_folds, shuffle=True)
+        elif data_augmentation == 'invariant':
+            fl_store = fl.fold_invariant_kf_augment(numel=numel, k_folds=k_folds, shuffle=True)
+        else:
+            fl_store = fl.create_kf(k_folds=k_folds, shuffle=True)
         # Load other data to evaluate the model on. e.g. the separate test set
         other_fl_dict = {k: load_testset_to_fl(v, norm_mask=[0, 1, 3, 4, 5], scaler=fl.scaler) for k, v in
                          zip(other_names, other_dir)}
