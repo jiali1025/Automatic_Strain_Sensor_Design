@@ -87,7 +87,7 @@ class Features_labels:
             For example, our 6 features are the 2 compositions, 1 thickness, and the dimension (which is 3 features
             since we use 1 hot encoding for 0D, 1D, 2D)
             We want to normalize the compositions and thickness but not the dimensions so we use the following 
-            norm mask = [0, 0, 0, 1, 1, 1] which prevents the last 3 features from being normalized
+            norm mask = [0, 1, 3, 4, 5] which prevents all but the 2nd entry feature (thickness) from being normalized
             '''
             self.norm_mask = norm_mask
             mask = np.array([1] * self.features_c_dim, dtype=np.bool)
