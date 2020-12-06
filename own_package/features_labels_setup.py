@@ -41,7 +41,7 @@ def load_testset_to_fl(testset_excel_file, norm_mask, scaler):
                        feature_names=df.columns[:6], label_names=df.columns[6:], norm_mask=norm_mask)
 
 
-def load_data_to_fl(data_loader_excel_file, normalise_labels, norm_mask=None):
+def load_data_to_fl(data_loader_excel_file, normalise_labels, norm_mask=None, scaler=None):
     # Read in the features and labels worksheet into dataframe
     xls = pd.ExcelFile(data_loader_excel_file)
     df_features = pd.read_excel(xls, sheet_name='features', index_col=0)
@@ -54,7 +54,7 @@ def load_data_to_fl(data_loader_excel_file, normalise_labels, norm_mask=None):
     labels_names = df_labels.columns.values
 
     fl = Features_labels(features_c, labels,
-                         features_c_names=features_c_names, labels_names=labels_names,
+                         features_c_names=features_c_names, labels_names=labels_names, scaler=scaler,
                          norm_mask=norm_mask, normalise_labels=normalise_labels,)
 
     return fl

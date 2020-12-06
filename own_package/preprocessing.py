@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
+from sklearn.preprocessing import MinMaxScaler
 from own_package.features_labels_setup import Features_labels_grid, load_data_to_fl
 from own_package.others import print_df_to_excel, create_excel_file
 
@@ -133,7 +134,9 @@ def l2_tracker(write_excel_dir, final_excel_loader, last_idx_store):
     wb = openpyxl.Workbook()
     wb.create_sheet('L2 Results')
     ws = wb[wb.sheetnames[-1]]
-    fl = load_data_to_fl(data_loader_excel_file=final_excel_loader, normalise_labels=False,
+    scaler = MinMaxScaler()
+    scaler.fit(np.array([[200], [2000]]))
+    fl = load_data_to_fl(data_loader_excel_file=final_excel_loader, normalise_labels=False, scaler=scaler,
                          norm_mask=[0, 1, 3, 4, 5])
     final_features = fl.features_c_norm
     suggestions_store = [y2 - y1 for y2, y1 in zip(last_idx_store[1:], last_idx_store[:-1])] + [0]
@@ -149,20 +152,9 @@ def l2_tracker(write_excel_dir, final_excel_loader, last_idx_store):
             l2_store.append(np.min(l2_distance))
         batch_l2_store.append(np.mean(l2_store))
 
-        if suggestions_numel == 0:
-            batch_l2_suggestions_store.append(np.NaN)
-        else:
-            l2_suggestions_store = []
-            suggestions_features = final_features[last_idx:last_idx + suggestions_numel].tolist()
-            for sf in suggestions_features:
-                l2_distance = np.linalg.norm(x=features - np.array(sf).reshape((1, -1)), ord=2, axis=1)
-                l2_suggestions_store.append(np.min(l2_distance))
-            batch_l2_suggestions_store.append(np.mean(l2_suggestions_store))
-
     df = pd.DataFrame(data=np.concatenate((np.array(last_idx_store).reshape(-1, 1),
-                                           np.array(batch_l2_store).reshape(-1, 1),
-                                           np.array(batch_l2_suggestions_store).reshape(-1, 1)), axis=1),
-                      columns=['Expt Batches', 'Mean Min L2', 'Suggestions Mean Min L2'],
+                                           np.array(batch_l2_store).reshape(-1, 1),), axis=1),
+                      columns=['Expt Batches', 'Mean Min L2'],
                       index=range(1, len(last_idx_store) + 1))
     print_df_to_excel(df=df, ws=ws)
     wb.save(write_excel_dir)
