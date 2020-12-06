@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
-from own_package.features_labels_setup import Features_labels_grid
-from own_package.others import print_df_to_excel
+from own_package.features_labels_setup import Features_labels_grid, load_data_to_fl
+from own_package.others import print_df_to_excel, create_excel_file
 
 
 def read_excel_data_to_cutoff(read_excel_file, write_dir):
@@ -112,3 +112,59 @@ def read_grid_data(read_excel_file, write_dir):
     with open(write_dir + '/grid_data', 'wb') as handle:
         pickle.dump(fl, handle, protocol=pickle.HIGHEST_PROTOCOL)
     return fl
+
+
+def l2_tracker(write_excel_dir, final_excel_loader, last_idx_store):
+    '''
+    To calculate the average min(L2 distance) over all the data points.
+    The avg min L2 is caclulated for each active learnning round, as indicated by the last_idx_store
+    :param write_excel_dir: Excel directory to write the data to
+    :param final_excel_loader: The excel loader file that contains the feature information
+    :param last_idx_store: A list to indicate which experiment number is the last experiment for that batch of active
+    learning round. For example, we have 3 active learning rounds with 5, 10, and 3 experiments per round.
+    So the last idx store will be [5, 15, 18]
+
+    Saves a new excel file which contains the L2 information
+    1) It contains the avg min L2 for each batch of active learning round
+    2) The avg min L2 distance for the batch of suggestions for the next active learning round.
+    Since the last round has no additional suggestions, the last round has no calculated value for this.
+    '''
+    write_excel_dir = create_excel_file(write_excel_dir)
+    wb = openpyxl.Workbook()
+    wb.create_sheet('L2 Results')
+    ws = wb[wb.sheetnames[-1]]
+    fl = load_data_to_fl(data_loader_excel_file=final_excel_loader, normalise_labels=False,
+                         norm_mask=[0, 1, 3, 4, 5])
+    final_features = fl.features_c_norm
+    suggestions_store = [y2 - y1 for y2, y1 in zip(last_idx_store[1:], last_idx_store[:-1])] + [0]
+    batch_l2_store = []
+    batch_l2_suggestions_store = []
+    for last_idx, suggestions_numel in zip(last_idx_store, suggestions_store):
+        features = final_features[:last_idx, :].tolist()
+
+        l2_store = []
+        for idx, x in enumerate(features):
+            other_features = np.array(features[:idx] + features[idx + 1:])
+            l2_distance = np.linalg.norm(x=other_features - np.array(x).reshape((1, -1)), ord=2, axis=1)
+            l2_store.append(np.min(l2_distance))
+        batch_l2_store.append(np.mean(l2_store))
+
+        if suggestions_numel == 0:
+            batch_l2_suggestions_store.append(np.NaN)
+        else:
+            l2_suggestions_store = []
+            suggestions_features = final_features[last_idx:last_idx + suggestions_numel].tolist()
+            for sf in suggestions_features:
+                l2_distance = np.linalg.norm(x=features - np.array(sf).reshape((1, -1)), ord=2, axis=1)
+                l2_suggestions_store.append(np.min(l2_distance))
+            batch_l2_suggestions_store.append(np.mean(l2_suggestions_store))
+
+    df = pd.DataFrame(data=np.concatenate((np.array(last_idx_store).reshape(-1, 1),
+                                           np.array(batch_l2_store).reshape(-1, 1),
+                                           np.array(batch_l2_suggestions_store).reshape(-1, 1)), axis=1),
+                      columns=['Expt Batches', 'Mean Min L2', 'Suggestions Mean Min L2'],
+                      index=range(1, len(last_idx_store) + 1))
+    print_df_to_excel(df=df, ws=ws)
+    wb.save(write_excel_dir)
+
+
