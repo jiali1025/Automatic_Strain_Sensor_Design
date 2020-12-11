@@ -89,3 +89,7 @@ There are:
 
 8.run_svm_classifier.py contains the code to get the svm classifier. It is discussed in paper's supporting information Note S3.
 
+## Final Model ##
+Here are the link for final model. It is an ensemble of 16 different models with different hyperparamters. And each model is an average of model trained from 10-fold cross validation. As a result, the total number of h5 files are 160.
+https://drive.google.com/drive/folders/1_SV7zQqVZU8iN6DPhjl1X_01NympHnbY
+
