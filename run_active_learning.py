@@ -22,7 +22,8 @@ def selector(run, **kwargs):
                         opt_mode='psoga', opt_params={**skopt_params, **psoga_params},
                         batch_runs=8,
                         normalise_labels=False,
-                        norm_mask=[0, 1, 3, 4, 5])
+                        norm_mask=[0, 1, 3, 4, 5],
+                        ignore_distance=False)  # If true, means use variance only
     elif run == 2:
         numel = kwargs['numel']
         svm_store = kwargs['svm_store']
