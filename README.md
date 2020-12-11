@@ -3,7 +3,17 @@
 ## Installation ##
 The requirement environment is as follow
 * python >= 3.6
-
+* matplotlib ~= 3.3.3
+* tensorflow ~= 2.1.0
+* scikit-learn ~= 0.23.2
+* numpy ~= 1.19.2
+* pandas ~= 1.1.3
+* openpyxl ~= 3.0.5
+* deap ~= 1.3.1
+* seaborn ~= 0.10.1
+* scipy ~= 1.5.2
+* six ~= 1.15.0
+* imblearn ~= 0.0
 
 ## Explaination of Code ##
 This is the code for paper Automatic Strain Sensor Design via Active Learning and Data Augmentation for Soft Machines
