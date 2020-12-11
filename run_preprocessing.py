@@ -15,9 +15,9 @@ def run_preprocess(select):
         read_grid_data(read_excel_file='./excel/grid.xlsx', write_dir=write_dir)
 
     elif select == 3:
-        l2_tracker(write_excel_dir='./results/preprocessing/ep_l2_var.xlsx',
-                   final_excel_loader='./excel/ep_l2_loader_var.xlsx',
-                   last_idx_store=[11, 16])
+        l2_tracker(write_excel_dir='./results/preprocessing/l2_information_rounded.xlsx',
+                   final_excel_loader='./excel/Data_loader_Round13_rounded.xlsx',
+                   last_idx_store=[11, 16, 21, 29, 37, 45, 69, 77, 85, 93, 101, 109, 117, 125])
 
 
 if __name__ == '__main__':
