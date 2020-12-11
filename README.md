@@ -1,4 +1,11 @@
 # Automatic Strain Sensor Design via Active Learning and Data Augmentation for Soft Machines
+
+## Installation ##
+The requirement environment is as follow
+* python >= 3.6
+
+
+## Explaination of Code ##
 This is the code for paper Automatic Strain Sensor Design via Active Learning and Data Augmentation for Soft Machines
 
 own_package contains most of the useful functions used in this project.
