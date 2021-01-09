@@ -88,7 +88,7 @@ To repeat the ML tasks inside our paper, one can just utilize all the different 
 
 8.run_svm_classifier.py contains the code to get the SVM classifier. It is discussed in paper's Supplementary Information Note S3.
 
-## Final ML-enabled prediction model ##
-Here is the link for ML model with the best prediction performance (named as ML model (UIP+GA) in the paper). It is an ensemble of 16 decision programs with different hyperparameters. And each decision program is an average from 10-fold cross validation. As a result, the total number of h5 files is 160. 
+## Final prediction model ##
+Here is the link for the prediction model with the best prediction performance (named as prediction model (UIP+GA) in the paper). It is an ensemble of 16 decision programs with different hyperparameters. And each decision program is an average from 10-fold cross validation. As a result, the total number of h5 files is 160. 
 https://drive.google.com/drive/folders/1_SV7zQqVZU8iN6DPhjl1X_01NympHnbY
 
