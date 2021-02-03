@@ -34,18 +34,18 @@ class Shortcut_fl:
 
 
 def load_testset_to_fl(testset_excel_file, norm_mask, scaler):
-    df = pd.read_excel(testset_excel_file, index_col=0)
+    df = pd.read_excel(testset_excel_file, index_col=0, engine='openpyxl')
     features = df.iloc[:,:6].values
-    labels = df.iloc[:,6:].values
+    labels = df.iloc[:,6:9].values
     return Shortcut_fl(features_c=features, labels=labels, scaler=scaler,
-                       feature_names=df.columns[:6], label_names=df.columns[6:], norm_mask=norm_mask)
+                       feature_names=df.columns[:6], label_names=df.columns[6:9], norm_mask=norm_mask)
 
 
 def load_data_to_fl(data_loader_excel_file, normalise_labels, norm_mask=None, scaler=None):
     # Read in the features and labels worksheet into dataframe
-    xls = pd.ExcelFile(data_loader_excel_file)
-    df_features = pd.read_excel(xls, sheet_name='features', index_col=0)
-    df_labels = pd.read_excel(xls, sheet_name='cutoff', index_col=0)
+    xls = pd.ExcelFile(data_loader_excel_file, engine='openpyxl')
+    df_features = pd.read_excel(xls, sheet_name='features', index_col=0, engine='openpyxl').dropna(axis=1)
+    df_labels = pd.read_excel(xls, sheet_name='cutoff', index_col=0, engine='openpyxl').dropna(axis=1)
 
     features_c = df_features.values
     features_c_names = df_features.columns.values
@@ -198,7 +198,7 @@ class Features_labels:
         :param shuffle:
         :return:
         """
-        smote = pd.read_excel(smote_excel, index_col=0).values
+        smote = pd.read_excel(smote_excel, index_col=0, engine='openpyxl').values
         smote_features = smote[:, :6]
         smote_labels = smote[:,6:]
         fl_store = []

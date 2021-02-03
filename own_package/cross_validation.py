@@ -14,7 +14,7 @@ from own_package.models import Kmodel, DTRmodel
 from .others import print_array_to_excel, print_df_to_excel
 
 
-def mean_haitao_error(y_true, y_pred):
+def mean_relative_error(y_true, y_pred):
     try:
         return np.mean(np.abs(y_true - y_pred).T / y_true[:, -1])
     except TypeError:
@@ -55,18 +55,18 @@ def run_kf(model_mode, fl, fl_store,
     :param k_shuffle: Whether to shuffle the given examples to split into k folds if using skf
     :return:
     '''
-    valid_scoring = ['mse', 'he']
+    valid_scoring = ['mse', 'mre']
     if scoring not in valid_scoring:
         raise TypeError(f'Scoring function {scoring} is not a valid option. Choose one of {valid_scoring}')
     k_folds = len(fl_store)
     # Run k model instance to perform skf
     results_dict = {'val': {'df': {'idx': [], 'fold': [], 'features': [], 'labels': [], 'predictions': []},
-                            'mse': -1, 'he': -1}}
+                            'mse': -1, 'mre': -1}}
     if other_fl_dict:
         other_fl_dict = {**other_fl_dict, **{'train': fl}}
         results_dict = {**results_dict,
                         **{k: {'df': {'features': v.features_c, 'labels': v.labels, 'predictions': []},
-                               'mse': -1, 'he': -1} for k, v in other_fl_dict.items()}}
+                               'mse': -1, 'mre': -1} for k, v in other_fl_dict.items()}}
 
     for fold, fl_tuple in enumerate(fl_store):  # Train, eval, save model, store results for each fold
         instance_start = time.time()
@@ -128,10 +128,10 @@ def run_kf(model_mode, fl, fl_store,
     # Calculate average scores across the folds
     mse_avg = mean_squared_error(np.vstack(results_dict['val']['df']['labels']),
                                  np.vstack(results_dict['val']['df']['predictions']))
-    he_avg = mean_haitao_error(np.vstack(results_dict['val']['df']['labels']),
+    mre_avg = mean_relative_error(np.vstack(results_dict['val']['df']['labels']),
                                np.vstack(results_dict['val']['df']['predictions']))
     results_dict['val']['mse'] = mse_avg
-    results_dict['val']['he'] = he_avg
+    results_dict['val']['mre'] = mre_avg
 
     def get_results_df(results, feature_names, label_names, idx_fold=False):
         # Convert results_dict df stored results into a dataframe
@@ -155,7 +155,7 @@ def run_kf(model_mode, fl, fl_store,
             results_dict[k]['df']['predictions'] = np.mean(np.array(results_dict[k]['df']['predictions']), axis=0)
             results_dict[k]['mse'] = mean_squared_error(results_dict[k]['df']['labels'],
                                                         results_dict[k]['df']['predictions'])
-            results_dict[k]['he'] = mean_haitao_error(results_dict[k]['df']['labels'],
+            results_dict[k]['mre'] = mean_relative_error(results_dict[k]['df']['labels'],
                                                       results_dict[k]['df']['predictions'])
             results_dict[k]['df'] = get_results_df(results=results_dict[k]['df'], feature_names=fl.features_c_names,
                                                    label_names=fl.labels_names, idx_fold=False)
@@ -174,7 +174,7 @@ def run_kf(model_mode, fl, fl_store,
         print_df_to_excel(df=results_dict['info']['hparams'], ws=ws, start_row=1,
                           start_col=len(results_dict['val']['df'].columns) + 3)
         # Writing scores df
-        headers = ['mse', 'he']
+        headers = ['mse', 'mre']
         values = [[mse_avg, he_avg]]
         scores_df = pd.DataFrame(values, columns=headers, index=['Avg'])
         print_df_to_excel(df=scores_df, ws=ws, start_row=5, start_col=len(results_dict['val']['df'].columns) + 3)
@@ -183,5 +183,5 @@ def run_kf(model_mode, fl, fl_store,
 
     if scoring == 'mse':
         return mse_avg, results_dict
-    elif scoring == 'he':
-        return he_avg, results_dict
+    elif scoring == 'mre':
+        return mre_avg, results_dict

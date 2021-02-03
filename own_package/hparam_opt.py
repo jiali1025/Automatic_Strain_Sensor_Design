@@ -62,7 +62,6 @@ def hparam_opt(model_mode, fl, fl_store, other_fl_dict, scoring, total_run, writ
                 f'**************************************************************************************************\n'
                 f'Run Number {run_count} \n'
                 f'nodes: {nodes}, epochs: {epochs}\n'
-                f'Current run {scoring} score: {val_score} \n'
                 f'Time Taken: {end_time - start_time}\n'
                 f'*********************************************************************************************')
             return val_score
@@ -105,7 +104,6 @@ def hparam_opt(model_mode, fl, fl_store, other_fl_dict, scoring, total_run, writ
             print(f'*************************************************************************************************\n'
                   f'Run Number {run_count} \n'
                   f'Depth {depth}, No. Estimators {num_est}\n'
-                  f'Current run {scoring} score: {val_score} \n'
                   f'Time Taken: {end_time - start_time}\n'
                   f'*********************************************************************************************')
             return val_score
@@ -152,7 +150,7 @@ def read_hparam_opt_data_store(write_dir):
             ws = wb[f'run {run + 1}']
             print_df_to_excel(df=data[k]['df'], ws=ws)
             print_df_to_excel(df=data['info']['hparams'], ws=ws, start_col=len(data[k]['df'].columns) + 3)
-            run_summary = {**run_summary, **{f'{k}_mse': data[k]['mse'], f'{k}_he': data[k]['he']}}
+            run_summary = {**run_summary, **{f'{k}_mse': data[k]['mse'], f'{k}_mre': data[k]['mre']}}
         summary_df.append(pd.Series(run_summary))
     # Print summary df
     summary_df = pd.concat(summary_df, axis=1).T

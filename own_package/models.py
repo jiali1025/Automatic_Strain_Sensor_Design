@@ -13,7 +13,7 @@ from sklearn.ensemble import AdaBoostRegressor
 
 
 def create_hparams(learning_rate=0.001, optimizer='Adam', epochs=100, batch_size=64,
-                   activation='relu', loss='he', nodes=10, reg_l1=0, reg_l2=0,
+                   activation='relu', loss='mre', nodes=10, reg_l1=0, reg_l2=0,
                    max_depth=6, num_est=300, verbose=1):
     """
     Creates hparam dict for input into create_DNN_model or other similar functions. Contain Hyperparameter info
@@ -63,7 +63,7 @@ class Kmodel:
         self.model = Model(inputs=features_in, outputs=x)
         optimizer = Adam(learning_rate=hparams['learning_rate'], clipnorm=1)
 
-        def haitao_error(y_true, y_pred):
+        def mean_relative_error(y_true, y_pred):
             diff = K.abs((y_true - y_pred) / K.reshape(K.clip(K.abs(y_true[:,-1]),
                                                     K.epsilon(),
                                                     None), (-1,1)))
@@ -71,8 +71,8 @@ class Kmodel:
 
         if hparams['loss'] == 'mape':
             self.model.compile(optimizer=optimizer, loss=MeanAbsolutePercentageError())
-        elif hparams['loss'] == 'haitao':
-            self.model.compile(optimizer=optimizer, loss=haitao_error)
+        elif hparams['loss'] == 'mre':
+            self.model.compile(optimizer=optimizer, loss=mean_relative_error)
         elif hparams['loss'] == 'mse':
             self.model.compile(optimizer=optimizer, loss='mean_squared_error')
         # self.model.summary()

@@ -6,7 +6,7 @@ import os, itertools, pickle
 from collections import defaultdict
 from deap import algorithms, base, creator, tools
 from sklearn.metrics import mean_squared_error
-from own_package.cross_validation import mean_haitao_error
+from own_package.cross_validation import mean_relative_error
 from own_package.others import print_array_to_excel, print_df_to_excel, create_results_directory
 
 
@@ -71,15 +71,15 @@ def ga_opt(load_dir_store, hparams):
     fit_avg = [x.item() for x in logbook.select("avg")]
     fit_max = [x.item() for x in logbook.select("max")]
     fig, ax1 = plt.subplots()
-    line1 = ax1.plot(gen, fit_min, label="Min HE")
-    line2 = ax1.plot(gen, fit_avg, label="Avg HE")
-    line3 = ax1.plot(gen, fit_max, label="Max HE")
+    line1 = ax1.plot(gen, fit_min, label="Min MRE")
+    line2 = ax1.plot(gen, fit_avg, label="Avg MRE")
+    line3 = ax1.plot(gen, fit_max, label="Max MRE")
     plt.legend()
     ax1.set_xlabel("Generation")
     ax1.set_ylabel("Haitao Error")
-    plt.savefig('{}/plots/GA_opt_HE_all.png'.format(results_dir), bbox_inches="tight")
+    plt.savefig('{}/plots/GA_opt_MRE_all.png'.format(results_dir), bbox_inches="tight")
     fig, ax1 = plt.subplots()
-    line1 = ax1.plot(gen, fit_min, label="Min HE")
+    line1 = ax1.plot(gen, fit_min, label="Min MRE")
     plt.legend()
     ax1.set_xlabel("Generation")
     ax1.set_ylabel("Total Generation Cost")
@@ -107,16 +107,16 @@ def ga_opt(load_dir_store, hparams):
         v = np.array(v)
         p_y = np.mean(v, axis=0)
         mse = mean_squared_error(y, p_y)
-        he = mean_haitao_error(y, p_y)
+        mre = mean_relative_error(y, p_y)
         var = np.mean(np.var(v, axis=0))
-        summary_df[k] = {'mse': mse, 'he': he, 'var': var}
+        summary_df[k] = {'mse': mse, 'mre': mre, 'var': var}
         df = pd.DataFrame(np.hstack((y, p_y)), columns=[f'y{i + 1}' for i in range(3)] + [f'P_y{i + 1}' for i in
                                                                                           range(3)])
         wb.create_sheet(k)
         ws = wb[k]
         print_df_to_excel(df=df, ws=ws)
         print_df_to_excel(df=pd.DataFrame.from_dict({'mse': [mse],
-                                                     'he': [he]}), ws=ws, start_col=10)
+                                                     'mre': [mre]}), ws=ws, start_col=10)
     # Print summary of losses for different dataset in the summary worksheet
     summary_df = pd.DataFrame.from_dict(summary_df)
     def move_column_inplace(df, col, pos):
