@@ -14,6 +14,7 @@ The requirement environment is as follow
 * scipy ~= 1.5.2
 * six ~= 1.15.0
 * imblearn ~= 0.0
+* skopt ~= 0.8
 
 ## Explanation of codes ##
 There are the codes for the paper of Automatic Strain Sensor Design via Active Learning and Data Augmentation for Soft Machines
