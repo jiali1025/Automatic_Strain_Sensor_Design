@@ -141,7 +141,7 @@ def read_hparam_opt_data_store(write_dir):
             with open('{}/{}'.format(f'{write_dir}/data_store', filename), 'rb') as handle:
                 data_store.extend(pickle.load(handle))
 
-    wb_store = {k: openpyxl.Workbook() for k in data_store[0] if (k not in ['info']) & ('testset' in k)}
+    wb_store = {k: openpyxl.Workbook() for k in data_store[0] if (k not in ['info'])}
     summary_df = []
     for run, data in enumerate(data_store):
         run_summary = data['info']['opt']

@@ -20,6 +20,7 @@ def selector(case, **kwargs):
         hparam_opt(model_mode=kwargs['model_mode'], fl=fl, fl_store=fl_store, other_fl_dict=other_fl_dict,
                    scoring=kwargs['scoring'], total_run=kwargs['total_run'], random_run=kwargs['random_run'],
                    plot_dir=f'{write_dir}/plots', write_dir=write_dir)
+        read_hparam_opt_data_store(write_dir=write_dir)
     elif case == 2:
         read_hparam_opt_data_store(write_dir='./results/hparam_opt/Round12_ann_mse')
 

@@ -33,8 +33,8 @@ def ga_opt(load_dir_store, hparams):
         # Individual is a list of 0 or 1, where if the j entry is 1, the j model is included and vice versa
         selected_mask = [idx for idx, value in enumerate(individual) if value == 1]
         # Calculate mean haitao error for the selected models
-        re_t = mean_haitao_error(yt, np.mean(p_yt_store[selected_mask, :, :], axis=0))
-        re_v = mean_haitao_error(yv, np.mean(p_yv_store[selected_mask, :, :], axis=0))
+        re_t = mean_relative_error(yt, np.mean(p_yt_store[selected_mask, :, :], axis=0))
+        re_v = mean_relative_error(yv, np.mean(p_yv_store[selected_mask, :, :], axis=0))
         re = (re_t + 2 * re_v) / 3
         return (re,)
 
