@@ -29,7 +29,7 @@ def selector(case, **kwargs):
 other_names = ['testset']
 other_dir = ['./demo/demo_test.xlsx']
 selector(case=1, loader_excel='./demo/demo_dataloader.xlsx', other_names=other_names, other_dir=other_dir,
-         write_dir_name='demo', k_folds=3, model_mode='dtr', scoring='mse', total_run=12, random_run=1,
+         write_dir_name='demo', k_folds=3, model_mode='dtr', scoring='mre', total_run=12, random_run=1,
          data_augmentation='invaiant', numel=3)
 
 
