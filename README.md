@@ -101,6 +101,6 @@ The required training data is prepared in ./demo/grid file. The file is in pickl
 
 If you want to train a svm classifier from our data, you can use the following code. Please make sure you have created a results directory. 
 ```
-python run_demo_svm_training
+python run_demo_svm_training.py
 ```
 It will produce an excel containing the performance of SVMs and their corresponding hyparameters in your result directory. After that, you could choose the best hyperparameter and change the case to case = 2 in the script to train a specific svm model and save it.
