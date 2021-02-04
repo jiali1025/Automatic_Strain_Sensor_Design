@@ -20,16 +20,15 @@ def selector(case, **kwargs):
         hparam_opt(model_mode=kwargs['model_mode'], fl=fl, fl_store=fl_store, other_fl_dict=other_fl_dict,
                    scoring=kwargs['scoring'], total_run=kwargs['total_run'], random_run=kwargs['random_run'],
                    plot_dir=f'{write_dir}/plots', write_dir=write_dir)
-        read_hparam_opt_data_store(write_dir=write_dir)
     elif case == 2:
-        read_hparam_opt_data_store(write_dir='./results/hparam_opt/demo_dtr_mse')
+        read_hparam_opt_data_store(write_dir='./results/hparam_opt/Round12_ann_mse')
 
 
 
-other_names = ['testset']
-other_dir = ['./demo/demo_test.xlsx']
-selector(case=1, loader_excel='./demo/demo_dataloader.xlsx', other_names=other_names, other_dir=other_dir,
-         write_dir_name='demo', k_folds=3, model_mode='dtr', scoring='mre', total_run=12, random_run=1,
+other_names = ['ett30', 'ett30I01']
+other_dir = ['./excel/ett30.xlsx', './excel/ett30I01.xlsx']
+selector(case=1, loader_excel='./excel/Data_loader_Round13.xlsx', other_names=other_names, other_dir=other_dir,
+         write_dir_name='Round13_invariant', k_folds=3, model_mode='ann', scoring='mse', total_run=15, random_run=1,
          data_augmentation='invaiant', numel=3)
 
 
