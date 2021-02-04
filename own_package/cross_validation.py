@@ -175,7 +175,7 @@ def run_kf(model_mode, fl, fl_store,
                           start_col=len(results_dict['val']['df'].columns) + 3)
         # Writing scores df
         headers = ['mse', 'mre']
-        values = [[mse_avg, he_avg]]
+        values = [[mse_avg, mre_avg]]
         scores_df = pd.DataFrame(values, columns=headers, index=['Avg'])
         print_df_to_excel(df=scores_df, ws=ws, start_row=5, start_col=len(results_dict['val']['df'].columns) + 3)
         wb.save(write_excel_dir)
