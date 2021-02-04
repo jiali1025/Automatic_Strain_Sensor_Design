@@ -94,3 +94,12 @@ To repeat the ML tasks inside our paper, one can just utilize all the different 
 Here is the link for the prediction model with the best prediction performance (named as prediction model (UIP+GA) in the paper). It is an ensemble of 16 decision programs with different hyperparameters. And each decision program is an average from 10-fold cross validation. As a result, the total number of h5 files is 160. 
 https://drive.google.com/drive/folders/1_SV7zQqVZU8iN6DPhjl1X_01NympHnbY
 
+## Demo ##
+* SVM classifier training
+The required training data is prepared in ./demo/grid file. The file is in pickle file form, it is produced by preprocessing the raw data grid_data.xlsx with our preprocessing script. 
+
+If you want to train a svm classifier from our data, you can use the following code. Please make sure you have created a results directory. 
+```
+python run_demo_svm_training
+```
+It will produce an excel containing the performance of SVMs and their corresponding hyparameters in your result directory. After that, you could choose the best hyperparameter and change the case to case = 2 in the script to train a specific svm model and save it.
