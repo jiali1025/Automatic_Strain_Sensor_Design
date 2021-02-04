@@ -71,7 +71,7 @@ def svm_ensemble_prediction(model_store, composition, probability=False):
         return predictions, distance
 
 
-def haitao_error(y_true, y_pred):
+def relative_error(y_true, y_pred):
     diff = K.abs((y_true - y_pred) / K.reshape(K.clip(K.abs(y_true[:, -1]),
                                                       K.epsilon(),
                                                       None), (-1, 1)))
