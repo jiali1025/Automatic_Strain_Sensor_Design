@@ -95,7 +95,7 @@ Here is the link for the prediction model with the best prediction performance (
 https://drive.google.com/drive/folders/1_SV7zQqVZU8iN6DPhjl1X_01NympHnbY
 
 ## Demo ##
-* SVM classifier training
+** SVM classifier training
 The required training data is prepared in ./demo/grid file. The file is in pickle file form, it is produced by preprocessing the raw data grid_data.xlsx with our preprocessing script. 
 
 If you want to train a svm classifier from our data, you can use the following code. Please make sure you have created a results directory. 
