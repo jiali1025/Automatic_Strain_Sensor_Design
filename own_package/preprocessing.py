@@ -18,7 +18,7 @@ def read_excel_data_to_cutoff(read_excel_file, write_dir):
     '''
     cutoff = [10,100]
     # read_excel_file part
-    df = pd.read_excel(read_excel_file, sheet_name='raw', header=[0, 1], index_col=0)
+    df = pd.read_excel(read_excel_file, sheet_name='raw', header=[0, 1], index_col=0, engine='openpyxl')
     # take only strain columns and make into a new df
     strain = df.xs('Strain (%)', level='Data', axis=1)
     strain = strain.values.T.tolist()  # .T to ensure that each sub list is along the column rather than rows of the df
@@ -91,7 +91,7 @@ def read_grid_data(read_excel_file, write_dir):
     :return: None
     '''
     # read_excel_file part
-    df = pd.read_excel(read_excel_file, index_col=0)
+    df = pd.read_excel(read_excel_file, index_col=0, engine='openpyxl')
     df = df.replace('A',1)
     df = df.replace(['B', 'C', 'D'], 0)
 
