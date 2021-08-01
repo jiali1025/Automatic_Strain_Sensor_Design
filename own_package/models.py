@@ -6,24 +6,25 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.python.keras.losses import MeanAbsolutePercentageError
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.multioutput import MultiOutputRegressor
+from sklearn.multioutput import MultiOutputRegressor, RegressorChain
 from sklearn.ensemble import AdaBoostRegressor
-
+from sklearn.svm import SVR
+from sklearn.linear_model import LinearRegression
 
 
 
 def create_hparams(learning_rate=0.001, optimizer='Adam', epochs=100, batch_size=64,
-                   activation='relu', loss='mre', nodes=10, reg_l1=0, reg_l2=0,
+                   activation='relu', loss='mre', nodes=10, reg_l1=0, reg_l2=0,gamma=1, C=0.1, chain=False,
                    max_depth=6, num_est=300, verbose=1):
     """
     Creates hparam dict for input into create_DNN_model or other similar functions. Contain Hyperparameter info
     :return: hparam dict
     """
     names = ['learning_rate', 'optimizer', 'epochs', 'batch_size',
-             'activation', 'loss', 'nodes', 'reg_l1', 'reg_l2',
+             'activation', 'loss', 'nodes', 'reg_l1', 'reg_l2', 'gamma', 'C', 'chain',
              'max_depth', 'num_est', 'verbose']
     values = [learning_rate, optimizer, epochs, batch_size,
-              activation, loss, nodes, reg_l1, reg_l2,
+              activation, loss, nodes, reg_l1, reg_l2, gamma, C, chain,
               max_depth, num_est, verbose]
     hparams = dict(zip(names, values))
     return hparams
@@ -130,17 +131,22 @@ class Kmodel:
 
 
 class DTRmodel:
-    def __init__(self, fl, max_depth=8, num_est=300):
+    def __init__(self, fl, max_depth=8, num_est=300, chain=False):
         """
         Initialises new DTR model
         :param fl: fl class
         :param max_depth: max depth of each tree
         :param num_est: Number of estimators in the ensemble of trees
+        :param chain: regressor chain (True) or independent multi-output (False)
         """
         self.labels_dim = fl.labels_dim
         self.labels_scaler = fl.labels_scaler
-        self.model = MultiOutputRegressor(
-            AdaBoostRegressor(DecisionTreeRegressor(max_depth=max_depth), n_estimators=num_est))
+        if chain:
+            self.model = RegressorChain(
+                AdaBoostRegressor(DecisionTreeRegressor(max_depth=max_depth), n_estimators=num_est))
+        else:
+            self.model = MultiOutputRegressor(
+                AdaBoostRegressor(DecisionTreeRegressor(max_depth=max_depth), n_estimators=num_est))
         self.normalise_labels = fl.normalise_labels
 
     def train_model(self, fl, *args, **kwargs):
@@ -161,4 +167,67 @@ class DTRmodel:
             y_pred = self.model.predict(features)
         return y_pred  # If labels is normalized, the prediction here is also normalized!
 
+
+class SVRmodel:
+    def __init__(self, fl, gamma, C):
+        """
+        Initialises new DTR model
+        :param fl: fl class
+        :param gamma
+        :param C
+        """
+        self.labels_dim = fl.labels_dim
+        self.labels_scaler = fl.labels_scaler
+        self.model = MultiOutputRegressor(SVR(gamma=gamma, C=C, kernel='rbf'))
+        self.normalise_labels = fl.normalise_labels
+
+    def train_model(self, fl, *args, **kwargs):
+        # *args, **kwargs is there for compatibility with the KModel class
+        training_features = fl.features_c_norm
+        if self.normalise_labels:
+            training_labels = fl.labels_norm
+        else:
+            training_labels = fl.labels
+        self.model.fit(training_features, training_labels)
+        return self
+
+    def predict(self, eval_fl):
+        features = eval_fl.features_c_norm
+        if self.labels_dim == 1:  # If labels is 1D output, the prediction will be a 1D array not 2D
+            y_pred = self.model.predict(features)[:, None]
+        else:
+            y_pred = self.model.predict(features)
+        return y_pred  # If labels is normalized, the prediction here is also normalized!
+
+
+class LRmodel:
+    def __init__(self, fl):
+        """
+        Initialises new DTR model
+        :param fl: fl class
+        :param gamma
+        :param C
+        """
+        self.labels_dim = fl.labels_dim
+        self.labels_scaler = fl.labels_scaler
+        self.model = LinearRegression()
+        self.normalise_labels = fl.normalise_labels
+
+    def train_model(self, fl, *args, **kwargs):
+        # *args, **kwargs is there for compatibility with the KModel class
+        training_features = fl.features_c_norm
+        if self.normalise_labels:
+            training_labels = fl.labels_norm
+        else:
+            training_labels = fl.labels
+        self.model.fit(training_features, training_labels)
+        return self
+
+    def predict(self, eval_fl):
+        features = eval_fl.features_c_norm
+        if self.labels_dim == 1:  # If labels is 1D output, the prediction will be a 1D array not 2D
+            y_pred = self.model.predict(features)[:, None]
+        else:
+            y_pred = self.model.predict(features)
+        return y_pred  # If labels is normalized, the prediction here is also normalized!
 
