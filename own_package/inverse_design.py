@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import openpyxl, time
-from skopt import forest_minimize, dummy_minimize
+from skopt import forest_minimize, dummy_minimize, gp_minimize
 from skopt.space import Real, Categorical
 from skopt.utils import use_named_args
 from own_package.pso_ga import pso_ga
@@ -122,8 +122,8 @@ def inverse_design(targets, loss_func, bounds, init_guess, model_directory_store
                 start = time.time()
             return score
         # Run skopt optimizer
-        if opt_mode == 'forest':
-            forest_minimize(func=fitness,
+        if opt_mode == 'gp':
+            gp_minimize(func=fitness,
                             dimensions=space,
                             acq_func='EI',  # Expected Improvement.
                             n_calls=opt_params['total_run'],
