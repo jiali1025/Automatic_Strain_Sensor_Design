@@ -16,6 +16,7 @@ The requirement environment is as follow
 * imblearn ~= 0.0
 * skopt ~= 0.8
 * xlrd >= 1.0.0
+* shap
 
 ## Explanation of codes ##
 There are the codes for the paper of Automatic Strain Sensor Design via Active Learning and Data Augmentation for Soft Machines
@@ -74,21 +75,27 @@ To repeat the ML tasks inside our paper, one can just utilize all the different 
 * 7.run_preprocessing.py
 * 8.run_svm_classifier.py
 
-1.run_active_learning.py contains the code to run active learning loop and SVM classifier. It is used in the ML tasks in Note 10, Note 11, and Note 12 of Supplementary Information.
+1.run_active_learning.py contains the code to run active learning loop and SVM classifier. It is used in the ML tasks in Note S6, Note S7 and Note S16-S19 in Supplementary Information.
 
-2.run_cross_validation.py contains the code to run k-fold cross validation of a model. If data agumentation is used, it is done during the cross validation process. Data agumentation is discussed in paper's supporting information Note S7.
+2.run_cross_validation.py contains the code to run k-fold cross validation of a model. If data agumentation is used, it is done during the cross validation process. Data agumentation is discussed in paper's supporting information Note S9.
 
-3.run_ga_combination.py contains the code to run GA selection of decision programs. It is discussed in paper's Supplementary Information Note S7.
+3.run_ga_combination.py contains the code to run GA selection of decision programs. It is discussed in paper's Supplementary Information Note S9.
 
 4.run_hyparam_opt.py contains the code to run hyperparameter optimization of the model.
 
-5.run_inverse_design.py contains the code to run inverse strain sensor design. It is discussed in paper's Supplementary Information Note S9.
+5.run_inverse_design.py contains the code to run inverse strain sensor design. It is discussed in paper's Supplementary Information Note S12-S15.
 
-6.run_pearson.py contains the code to run Pearson’s coefficient analysis. It is discussed in paper's Supplementary Information Note S8.
+6.spearman_analysis.py contains the code to run Spearman's rank correlation analysis. It is discussed in main paper Fig.5 .
 
 7.run_preprocessing.py contains the code to run pre-processing of the raw data.
 
 8.run_svm_classifier.py contains the code to get the SVM classifier. It is discussed in paper's Supplementary Information Note S3.
+
+9. run_lr.py contains the code to train linear models. It is used in the ML tasks in Note S5 and other linear model trainings. 
+
+10. Shap_analysis.py contains the code to do the shap analysis. It is discussed in Note S11 in paper's Supplementary Information.
+
+
 
 ## Final prediction model ##
 Here is the link for the prediction model with the best prediction performance (named as prediction model (UIP+GA) in the paper). It is an ensemble of 16 decision programs with different hyperparameters. And each decision program is an average from 10-fold cross validation. As a result, the total number of h5 files is 160. 
