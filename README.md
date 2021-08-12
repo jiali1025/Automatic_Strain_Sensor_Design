@@ -91,9 +91,9 @@ To repeat the ML tasks inside our paper, one can just utilize all the different 
 
 8.run_svm_classifier.py contains the code to get the SVM classifier. It is discussed in paper's Supplementary Information Note S3.
 
-9. run_lr.py contains the code to train linear models. It is used in the ML tasks in Note S5 and other linear model trainings. 
+9.run_lr.py contains the code to train linear models. It is used in the ML tasks in Note S5 and other linear model trainings. 
 
-10. Shap_analysis.py contains the code to do the shap analysis. It is discussed in Note S11 in paper's Supplementary Information.
+10.Shap_analysis.py contains the code to do the shap analysis. It is discussed in Note S11 in paper's Supplementary Information.
 
 
 
