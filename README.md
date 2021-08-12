@@ -38,21 +38,21 @@ Inside own_package there are following scripts:
 * 12.pso_ga.py
 * 13.svm_classifier.py
 
-1.active_learning.py contains the main code used in the active learning loop, including the functions to load the trained SVM , select ensembled decision programs, and calculate the acquisition function during each learning loop. It is discussed in paper's Supplementary Information Note S5.
+1.active_learning.py contains the main code used in the active learning loop, including the functions to load the trained SVM , select ensembled decision programs, and calculate the acquisition function during each learning loop. It is discussed in paper's Supplementary Information Note S4 and Note S6.
 
-2.analysis.py contains the main code to implement statistical analyses based on Pearson’s coefficient. It is discussed in paper's Supplementary Information Note S8.
+2.analysis.py contains the main code to implement statistical analyses based on Pearson’s coefficient. It is not used now.
 
 3.cross_validation.py contains the main code to realize k-fold cross validation during model training process with different evaluation criteria such as MSE and MRE.
 
-4.data_agumentation.py contains the main code for data augmentation including SMOTE-REG and UIP methods, which is discussed in paper's Supplementary Information Note S7.
+4.data_agumentation.py contains the main code for data augmentation including SMOTE-REG and UIP methods, which is discussed in paper's Supplementary Information Note S9.
 
 5.feature_labels_setup.py contains the main code to construct the recipe labels.
 
-6.ga_combination.py contains the main code for GA to select the best decision programs. It is discussed in paper's Supplementary Information Note S7.
+6.ga_combination.py contains the main code for GA to select the best decision programs. It is discussed in paper's Supplementary Information Note S9.
 
 7.hparam_opt.py contains the main code for hyperparameter optimization of all the models emerged in the paper.
 
-8.inverse_design.py contains the main code for running inverse strain sensor design. By entering the design requests to the prediction model, several feasible fabrication recipes were suggested by this optimizer. It is discussed in paper's Supplementary Information Note S9.
+8.inverse_design.py contains the main code for running inverse strain sensor design. By entering the design requests to the prediction model, several feasible fabrication recipes were suggested by this optimizer. It is discussed in paper's Supplementary Information Note S12-S15.
 
 9.models.py contains the main code to build the different model classes which could be extracted by different programs inside this project.
 
