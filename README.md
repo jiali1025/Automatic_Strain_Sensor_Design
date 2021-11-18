@@ -1,4 +1,4 @@
-# Automatic Strain Sensor Design via Active Learning and Data Augmentation for Soft Machines
+# Automatic Strain Sensor Design via Active Learning and Data Augmentation for Soft Machines.
 
 ## Installation ##
 The requirement environment is as follow
